@@ -15,6 +15,14 @@ const app = express();
 
 app.use(bodyParser.json());
 
+const getUserEvents = async (eventsIds) => {
+  const events = await Event.find({
+    _id: {$in: eventsIds}
+  })
+
+  return events;
+}
+
 app.use('/graphql', graphHttp({
   schema: buildSchema(`
     type Event {
@@ -23,12 +31,14 @@ app.use('/graphql', graphHttp({
       description: String!
       price: Float!
       date: String!
+      creator: User!
     }
 
     type User {
       _id: ID
       email: String!
       password: String
+      createdEvents: [Event!]!
     }
 
     input EventInput {
@@ -58,17 +68,22 @@ app.use('/graphql', graphHttp({
   `),
   rootValue: {
     // retrieve events 
-    events: () => {
-      return Event
-        .find()
-        .then(events => {
-          return events.map(event => {
-            return {...event._doc};
-          })
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    events: async () => {
+
+      // get events
+      const events  = await Event.find();
+
+      // map events to get creator data
+      return events.map( async (event) => {
+        let user = await User.findById(event.creator);
+
+        // get user events
+        const userEvents = await getUserEvents(user.createdEvents);
+        console.log('user events ===>', userEvents);
+        user.createdEvents = userEvents;
+        event.creator = user;
+        return event;
+      });
     },
 
     // create event
