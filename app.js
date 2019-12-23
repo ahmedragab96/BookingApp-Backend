@@ -25,7 +25,7 @@ mongoose
       process.env.MONGO_DB
     }?retryWrites=true&w=majority`
   ).then(() => {
-    app.listen(3000); 
+    app.listen(3000);
   }).catch(err => {
     console.log(err);
   });
