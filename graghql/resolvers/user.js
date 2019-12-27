@@ -17,7 +17,7 @@ const User = require('../../models/user');
       const existedUser = await User.findOne({
         email,
       });
-      console.log(existedUser);
+  
       if (existedUser) {
         throw new Error('User already exists');
       }

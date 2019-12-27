@@ -21,8 +21,14 @@ const events = async () => {
 };
 
 // create event
-const createEvent =  async (args) => {
+const createEvent =  async (args, req) => {
 	try {
+		if(!req.isAuthorized) {
+			throw new Error('Not Authorized');
+		}
+		const {
+			id,
+		} = req.user;
 		const {
 			title,
 			description,
@@ -30,8 +36,8 @@ const createEvent =  async (args) => {
 		} = args.eventInput;
 
 		// check user creator
-		const user = await User.findById("5dfce38d4924a4249e412aed");
-		console.log(user);
+		const user = await User.findById(id);
+
 
 		if (!user) {
 			throw new Error('No user exists');
@@ -43,7 +49,7 @@ const createEvent =  async (args) => {
 			description,
 			price: +price,
 			date: new Date().toString(),
-			creator: '5dfce38d4924a4249e412aed',
+			creator: id,
 		});
 
 		// save event in database and in user event array

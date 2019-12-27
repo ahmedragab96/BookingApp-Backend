@@ -8,8 +8,11 @@ const {
 
 
 //get bookings data
-const bookings = async () => {
+const bookings = async (req) => {
   try {
+    if(!req.isAuthorized) {
+			throw new Error('Not Authorized');
+		}
     const bookings = await Booking.find();
     return bookings.map(booking => {
       return {
@@ -21,8 +24,14 @@ const bookings = async () => {
   }
 };
 
-const bookEvent = async (args) => {
+const bookEvent = async (args, req) => {
   try {
+    if(!req.isAuthorized) {
+			throw new Error('Not Authorized');
+    }
+    const {
+      id,
+    } = req.user;
     const {
       eventId,
     } = args;
@@ -34,7 +43,7 @@ const bookEvent = async (args) => {
 
     const booking = new Booking({
       event,
-      user: '5dfce38d4924a4249e412aed',
+      user: id,
     });
 
     const result = await booking.save();
@@ -48,8 +57,11 @@ const bookEvent = async (args) => {
   }
 };
 
-const cancelBooking = async (args) => {
+const cancelBooking = async (args, req) => {
   try {
+    if(!req.isAuthorized) {
+			throw new Error('Not Authorized');
+		}
     const {
       bookingId,
     } = args;
