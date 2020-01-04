@@ -1,7 +1,9 @@
-const express = require('express');
+const express    = require('express');
 const bodyParser = require('body-parser');
-const graphHttp = require('express-graphql');
-const mongoose = require('mongoose');
+const graphHttp  = require('express-graphql');
+const mongoose   = require('mongoose');
+const cors       = require('cors');
+const dotenv     = require('dotenv').config();
 
 const graphQlSchema = require('./graghql/schema/index');
 const graphQlResolvers = require('./graghql/resolvers/index');
@@ -10,6 +12,8 @@ const {
 } = require('./middleware/verifyUser');
 
 const app = express();
+
+app.use(cors());
 
 app.use(bodyParser.json());
 
@@ -30,7 +34,7 @@ mongoose
       process.env.MONGO_DB
     }?retryWrites=true&w=majority`
   ).then(() => {
-    app.listen(3000);
+    app.listen(8080);
   }).catch(err => {
     console.log(err);
   });
