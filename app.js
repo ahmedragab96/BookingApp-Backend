@@ -5,11 +5,12 @@ const mongoose   = require('mongoose');
 const cors       = require('cors');
 const dotenv     = require('dotenv').config();
 
-const graphQlSchema = require('./graghql/schema/index');
+const graphQlSchema    = require('./graghql/schema/index');
 const graphQlResolvers = require('./graghql/resolvers/index');
 const {
   verifyToken,
 } = require('./middleware/verifyUser');
+const sendEmail = require('./helperFunctions/sendEmail');
 
 const app = express();
 
@@ -35,6 +36,11 @@ mongoose
     }?retryWrites=true&w=majority`
   ).then(() => {
     app.listen(8080);
+    sendEmail(
+      'ahmed.r.shaban96@gmail.com',
+      'Server is Working',
+      '<b> Server is working perfectly 	&#128147; 	&#128147;</b>'
+    );
   }).catch(err => {
     console.log(err);
   });
