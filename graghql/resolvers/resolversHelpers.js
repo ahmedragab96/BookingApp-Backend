@@ -1,5 +1,4 @@
 const User = require('../../models/user');
-const Booking = require('../../models/booking');
 const Event = require('../../models/event');
 
 const getUserEvents = async (eventsIds) => {

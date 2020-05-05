@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 
 // models
 const User = require('../../models/user');
+const {
+  getUser,
+} = require('./resolversHelpers');
 
   // create user
   const createUser = async (args) => {
@@ -45,6 +48,7 @@ const login = async (args) => {
       email,
       password,
     } = args;
+    console.log(email, password);
 
     const user = await User.findOne({email});
     if (!user) {
@@ -73,7 +77,23 @@ const login = async (args) => {
   }
 }
 
+const me = async (args, req) => {
+  try {
+    const {
+      id,
+    } = req.user;
+
+    const user = await getUser(id);
+    return {
+      ...user
+    }
+  } catch (error) {
+    throw error;
+  }
+} 
+
 module.exports = {
   createUser,
   login,
+  me,
 };

@@ -33,14 +33,18 @@ mongoose
       process.env.MONGO_PASSWORD
     }@bookingapp-1puwi.mongodb.net/${
       process.env.MONGO_DB
-    }?retryWrites=true&w=majority`
+    }?retryWrites=true&w=majority` ,
+    { useNewUrlParser: true,
+      useUnifiedTopology: true }
   ).then(() => {
     app.listen(8080);
-    sendEmail(
-      'ahmed.r.shaban96@gmail.com',
-      'Server is Working',
-      '<b> Server is working perfectly 	&#128147; 	&#128147;</b>'
-    );
+    // sendEmail(
+    //   'ahmed.r.shaban96@gmail.com',
+    //   'Server is Working',
+    //   '<b> Server is working perfectly 	&#128147; 	&#128147;</b>'
+    // );
+    console.log(`🚀 Server ready at ${8080}`);
   }).catch(err => {
+    // console.log('hlo');
     console.log(err);
   });
